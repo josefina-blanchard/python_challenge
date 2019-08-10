@@ -1,0 +1,133 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Financial Analysis\n",
+      "------------------\n",
+      "Total months:  86\n",
+      "Total:  38382578\n",
+      "Average Change:  -2315.12\n",
+      "Greatest Increase in Profits:  Feb-2012 1926159\n",
+      "Greatest Decrease in Profits:  Sep-2013 -2196167\n"
+     ]
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import csv\n",
+    "csvpath = os.path.join(\"budget_data.csv\")\n",
+    "\n",
+    "#csvpath\n",
+    "#with open(csvpath, \"r\") as budgetfile:\n",
+    " #   line = budgetfile.read()\n",
+    "\n",
+    "counterlist = []\n",
+    "#input\n",
+    "with open(csvpath, \"r\", newline = \"\") as csvfile:\n",
+    "    csvreader = csv.reader(csvfile, delimiter =\",\")\n",
+    "    #print(csvreader)\n",
+    "    csvheader = next(csvreader)\n",
+    "    #print(f\"CSV Header : {csvheader}\") \n",
+    "    rowscounter = 0\n",
+    "    for rows in csvreader:\n",
+    "     #   print(rows)\n",
+    "        rowscounter = rowscounter + 1 #This is to count the lines as each month is in a line\n",
+    "        counterlist.append([rowscounter, rows[0], int(rows[1])])\n",
+    "#print(counterlist)\n",
+    "\n",
+    "# processing the data now\n",
+    "rows = [variable[0] for variable in counterlist]\n",
+    "date = [variable[1] for variable in counterlist]\n",
+    "amount = [variable[2] for variable in counterlist]\n",
+    "\n",
+    "#print(len(rows))\n",
+    "#print(totalrows)\n",
+    "#print(sum(rows))\n",
+    "sumtotal = sum(amount)\n",
+    "#print(sumtotal)\n",
+    "\n",
+    "newrow = -1\n",
+    "for lists in counterlist:\n",
+    "    newrow = newrow + 1\n",
+    "    if newrow is 0:\n",
+    "        counterlist[newrow].append(0)\n",
+    "    else:\n",
+    "        x = amount[newrow]\n",
+    "        y = amount[newrow - 1]\n",
+    "        delta = x - y\n",
+    "        counterlist[newrow].append(delta)\n",
+    "#print(counterlist) \n",
+    "deltanumber = [variable[3] for variable in counterlist]\n",
+    "promedio = sum(deltanumber) /( len(rows)-1)\n",
+    "#print(round(promedio,2))\n",
+    "\n",
+    "#print(max(deltanumber))\n",
+    "maxindex = deltanumber.index(max(deltanumber))\n",
+    "#print(maxindex)\n",
+    "maxdate = date[maxindex]\n",
+    "#print(maxdate)\n",
+    "maxdelta = max(deltanumber)\n",
+    "minindex = deltanumber.index(min(deltanumber))\n",
+    "mindate = date[minindex]\n",
+    "mindelta = min(deltanumber)\n",
+    "\n",
+    "print(\"Financial Analysis\")\n",
+    "print(\"------------------\")\n",
+    "print(\"Total months: \", (len(rows)))\n",
+    "print(\"Total: \",  (sumtotal))\n",
+    "print(\"Average Change: \", (round(promedio,2)))\n",
+    "print(\"Greatest Increase in Profits: \", maxdate, maxdelta)\n",
+    "print(\"Greatest Decrease in Profits: \", mindate, mindelta)\n",
+    "#print(minindex)\n",
+    "#print(mindelta)\n",
+    "#print(mindate)\n",
+    "\n",
+    "csvoutputh = os.path.join(\"Results.csv\")\n",
+    "with open(csvoutputh, \"w\", newline = \"\") as csvfile:\n",
+    "    csvwriter = csv.writer(csvfile, delimiter = \",\")\n",
+    "    csvwriter.writerow([\"Stat\", \"Result\"])\n",
+    "    csvwriter.writerow([\"Total Months:\", (len(rows))])\n",
+    "    csvwriter.writerow([\"Total\",(sumtotal)])\n",
+    "    csvwriter.writerow([\"Average Change: \",(round(promedio,2))])\n",
+    "    csvwriter.writerow([\"Greatest Increase in Profits: \", maxdate, maxdelta])\n",
+    "    csvwriter.writerow([\"Greatest Decrease in Profits: \", mindate, mindelta])\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Conda [PythonData]",
+   "language": "python",
+   "name": "pythondata"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
